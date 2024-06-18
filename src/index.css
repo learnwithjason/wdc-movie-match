@@ -1,0 +1,99 @@
+@layer algolia, base, components;
+
+@import 'https://cdn.jsdelivr.net/npm/instantsearch.css@8.2.1/themes/satellite-min.css'
+	layer(algolia);
+
+@layer base {
+	:root {
+		--color-gray-000: oklch(98.53% 0.007 257.29);
+		--color-gray-900: oklch(17.06% 0.074 257.29);
+
+		font-family: system-ui, -apple-system, sans-serif;
+		line-height: 1.45;
+
+		color-scheme: light dark;
+		color: light-dark(var(--color-gray-900), var(--color-gray-000));
+		background-color: light-dark(var(--color-gray-000), var(--color-gray-900));
+	}
+
+	:is(h1, h2, h3, h4, h5, h6) {
+		line-height: 1.1;
+	}
+
+	main {
+		inline-size: 800px;
+		margin-block: 3rem;
+		margin-inline: auto;
+	}
+}
+
+@layer components {
+	.ais-SearchBox {
+		margin-block-end: 2rem;
+	}
+
+	.movie-preview {
+		display: flex;
+		gap: 2rem;
+
+		& h2 {
+			font-size: 1.25rem;
+		}
+
+		& .genres {
+			display: flex;
+			gap: 1rem;
+			list-style: none;
+			padding: 0;
+		}
+	}
+
+	.movie-details {
+		block-size: 90cqb;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		inset: 5cqb 5cqi;
+		inline-size: 800px;
+		margin-inline: auto;
+
+		& .close {
+			background: none;
+			border: 0;
+			display: inline-block;
+		}
+
+		& .movie {
+			display: flex;
+			gap: 3rem;
+		}
+	}
+
+	.ais-LookingSimilar-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2rem;
+	}
+
+	.ais-LookingSimilar-item {
+		padding: 0;
+	}
+
+	.tiny-preview {
+		& button {
+			background: none;
+			border: 0;
+			display: block;
+			inline-size: 100px;
+			margin: 0;
+			padding: 0;
+		}
+
+		& img {
+			block-size: auto;
+			cursor: pointer;
+			display: block;
+			inline-size: 100%;
+		}
+	}
+}
