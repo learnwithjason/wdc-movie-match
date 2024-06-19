@@ -5,6 +5,9 @@ import {
 	SearchBox,
 	Hits,
 	LookingSimilar,
+	RefinementList,
+	Pagination,
+	ClearRefinements,
 } from 'react-instantsearch';
 
 const searchClient = algoliasearch(
@@ -37,7 +40,7 @@ function FullMovie({
 		<>
 			<div className="movie-details">
 				<button type="button" onClick={closePopover} className="close">
-					&times; close
+					&larr; back
 				</button>
 				<div className="movie">
 					<img
@@ -46,7 +49,10 @@ function FullMovie({
 					/>
 					<div className="details">
 						<h2>
-							{title} ({new Date(release_date).getFullYear()})
+							{title}{' '}
+							{release_date
+								? `(${new Date(release_date).getFullYear()})`
+								: null}
 						</h2>
 						<p>{tagline}</p>
 						<ul className="genres">
@@ -54,6 +60,9 @@ function FullMovie({
 								<li key={`${objectID}-genre-${genre}`}>{genre}</li>
 							))}
 						</ul>
+						<button onClick={() => alert('TODO: add payment')}>
+							Rent for $3.99
+						</button>
 					</div>
 				</div>
 				<div className="previews">
@@ -100,7 +109,15 @@ function MoviePreview({
 	movie: Movie;
 	onClickHandler: (movie: Movie) => void;
 }) {
-	const { title, poster_path, genres, objectID, release_date, tagline } = movie;
+	const {
+		title,
+		poster_path,
+		genres,
+		objectID,
+		release_date,
+		overview,
+		tagline,
+	} = movie;
 
 	return (
 		<>
@@ -108,12 +125,15 @@ function MoviePreview({
 				<img
 					src={`https://image.tmdb.org/t/p/w185${poster_path}`}
 					alt={title}
+					onClick={() => onClickHandler(movie)}
 				/>
 				<div className="details">
-					<h2>
-						{title} ({new Date(release_date).getFullYear()})
+					<h2 onClick={() => onClickHandler(movie)}>
+						{title}{' '}
+						{release_date ? `(${new Date(release_date).getFullYear()})` : null}
 					</h2>
 					<p>{tagline}</p>
+					<p>{overview}</p>
 					<ul className="genres">
 						{genres.map((genre) => (
 							<li key={`${objectID}-genre-${genre}`}>{genre}</li>
@@ -150,25 +170,37 @@ export function App() {
 	}
 
 	return (
-		<main>
-			<InstantSearch searchClient={searchClient} indexName="movies_copy">
-				{selectedMovie && popoverVisible ? (
-					<FullMovie
-						visible={popoverVisible}
-						closePopover={closePopover}
-						movie={selectedMovie}
-						onClickHandler={(movie) => {
-							setSelectedMovie(movie);
-						}}
-					/>
-				) : (
-					<>
-						<h1>What do you want to watch tonight?</h1>
-						<SearchBox />
-						<Hits hitComponent={HitComponent} />
-					</>
-				)}
-			</InstantSearch>
-		</main>
+		<>
+			<main>
+				<InstantSearch searchClient={searchClient} indexName="movies_copy">
+					{selectedMovie && popoverVisible ? (
+						<FullMovie
+							visible={popoverVisible}
+							closePopover={closePopover}
+							movie={selectedMovie}
+							onClickHandler={(movie) => {
+								setSelectedMovie(movie);
+							}}
+						/>
+					) : (
+						<>
+							<h1>What do you want to watch tonight?</h1>
+							<SearchBox />
+							<div className="search">
+								<div>
+									<Hits hitComponent={HitComponent} />
+									<Pagination />
+								</div>
+
+								<aside>
+									<RefinementList attribute="genres" operator="and" />
+									<ClearRefinements />
+								</aside>
+							</div>
+						</>
+					)}
+				</InstantSearch>
+			</main>
+		</>
 	);
 }

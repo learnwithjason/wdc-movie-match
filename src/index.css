@@ -8,12 +8,15 @@
 		--color-gray-000: oklch(98.53% 0.007 257.29);
 		--color-gray-900: oklch(17.06% 0.074 257.29);
 
+		--bg: light-dark(var(--color-gray-000), var(--color-gray-900));
+		--fg: light-dark(var(--color-gray-900), var(--color-gray-000));
+
 		font-family: system-ui, -apple-system, sans-serif;
 		line-height: 1.45;
 
 		color-scheme: light dark;
-		color: light-dark(var(--color-gray-900), var(--color-gray-000));
-		background-color: light-dark(var(--color-gray-000), var(--color-gray-900));
+		color: var(--fg);
+		background-color: var(--bg);
 	}
 
 	:is(h1, h2, h3, h4, h5, h6) {
@@ -25,16 +28,63 @@
 		margin-block: 3rem;
 		margin-inline: auto;
 	}
+
+	button {
+		background: var(--fg);
+		border: 0;
+		border-radius: 0.25rem;
+		color: var(--bg);
+		font-size: 1rem;
+		font-weight: bold;
+		padding: 0.5rem 1.25rem;
+	}
 }
 
 @layer components {
+	.search {
+		display: flex;
+		gap: 2rem;
+		justify-content: space-between;
+	}
+
 	.ais-SearchBox {
 		margin-block-end: 2rem;
+	}
+
+	.ais-Pagination {
+		margin-block-start: 2rem;
+		margin-inline: auto;
+		inline-size: max-content;
+	}
+
+	.ais-RefinementList {
+		inline-size: 165px;
+	}
+
+	.ais-ClearRefinements-button {
+		background: var(--bg);
+		border: 1px solid color-mix(in oklch, var(--fg), transparent 80%);
+		color: var(--fg);
+		font-size: 0.75rem;
+		font-weight: normal;
+		height: auto;
+		line-height: 1.1;
+		margin-block-start: 0.5rem;
+		padding: 0.25rem;
+
+		&[disabled] {
+			display: none;
+		}
 	}
 
 	.movie-preview {
 		display: flex;
 		gap: 2rem;
+		inline-size: 550px;
+
+		& img {
+			object-fit: cover;
+		}
 
 		& h2 {
 			font-size: 1.25rem;
@@ -42,9 +92,18 @@
 
 		& .genres {
 			display: flex;
-			gap: 1rem;
+			flex-wrap: wrap;
+			gap: 0.5rem 1rem;
 			list-style: none;
 			padding: 0;
+
+			& li {
+				background: color-mix(in oklch, var(--fg), transparent 98%);
+				border: 1px solid color-mix(in oklch, var(--fg), transparent 80%);
+				border-radius: 1rem;
+				font-size: 0.75rem;
+				padding: 0 0.5rem;
+			}
 		}
 	}
 
@@ -55,17 +114,23 @@
 		gap: 2rem;
 		inset: 5cqb 5cqi;
 		inline-size: 800px;
+		justify-content: start;
 		margin-inline: auto;
 
 		& .close {
-			background: none;
-			border: 0;
 			display: inline-block;
+			width: max-content;
 		}
 
 		& .movie {
 			display: flex;
 			gap: 3rem;
+		}
+	}
+
+	.details {
+		& button {
+			margin-block-start: 1rem;
 		}
 	}
 
